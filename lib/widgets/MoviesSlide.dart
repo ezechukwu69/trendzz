@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:trendzz/blocs/model/movies.dart';
-import 'package:trendzz/pages/MovieViewPage.dart';
 
 class MoviesSlide extends StatelessWidget {
   final String title;
