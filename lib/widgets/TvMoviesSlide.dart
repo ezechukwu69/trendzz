@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:trendzz/blocs/model/movies.dart';
+import 'package:trendzz/blocs/model/tv/tvseries.dart';
+import 'package:trendzz/pages/TvViewPage.dart';
 
-class MoviesSlide extends StatelessWidget {
+class TvSeriesSlide extends StatelessWidget {
   final String title;
   final bloc;
 
-  MoviesSlide({this.title, this.bloc});
+  TvSeriesSlide({this.title, this.bloc});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -48,36 +49,42 @@ class MoviesSlide extends StatelessWidget {
           stream: bloc,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              List<Results> movies = snapshot.data;
-              print(movies.length);
+              List<Results> tvSeries = snapshot.data;
+              print(tvSeries.length);
               return Container(
                 height: MediaQuery.of(context).size.height / 4,
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
                   cacheExtent: 10.0,
-                  itemCount: movies.length,
+                  itemCount: tvSeries.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, i) {
-                    return i <= 19 ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context)
-                              .pushNamed("/movieView", arguments: movies[i]);
-                        },
-                        child: Hero(
-                          tag: movies[i].id,
-                          child: CachedNetworkImage(
-                              height: MediaQuery.of(context).size.height / 4,
-                              width: MediaQuery.of(context).size.width / 3,
-                              key: UniqueKey(),
-                              placeholder: (context, url) =>
-                                  CircularProgressIndicator(),
-                              imageUrl:
-                                  "https://image.tmdb.org/t/p/original${movies[i].posterPath}"),
-                        ),
-                      ),
-                    ): Container();
+                    return i <= 19
+                        ? Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 2.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pushNamed("/tvView",
+                                    arguments: tvSeries[i]);
+                                     Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => TvViewPage()));
+                              },
+                              child: Hero(
+                                tag: "${tvSeries[i].id}",
+                                child: CachedNetworkImage(
+                                    height:
+                                        MediaQuery.of(context).size.height / 4,
+                                    width:
+                                        MediaQuery.of(context).size.width / 3,
+                                    key: UniqueKey(),
+                                    placeholder: (context, url) =>
+                                        CircularProgressIndicator(),
+                                    imageUrl:
+                                        "https://image.tmdb.org/t/p/original${tvSeries[i].posterPath}"),
+                              ),
+                            ),
+                          )
+                        : Container();
                   },
                 ),
               );

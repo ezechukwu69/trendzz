@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:trendzz/blocs/MainBloc.dart';
 import 'package:trendzz/pages/MovieViewPage.dart';
+import 'package:trendzz/pages/TvPage.dart';
+import 'package:trendzz/pages/TvViewPage.dart';
 import 'pages/HomePage.dart';
 import 'widgets/MyAppBar.dart';
 import 'widgets/MyBottomNavigation.dart';
@@ -23,6 +25,7 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (context) => MyHomePage(mainBloc: mainBloc),
+        "/tvView": (context) => TvViewPage(bloc: mainBloc),
         "/movieView": (context) => MovieViewPage(bloc: mainBloc),
       },
     );
@@ -75,7 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
     widget.mainBloc.popularBloc.populateData();
     widget.mainBloc.topBloc.populateData();
     widget.mainBloc.upcomingBloc.populateData();
-    // widget.mainBloc.posterBloc.addPoster;
     super.initState();
   }
 
@@ -89,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ? HomePage(
                   mainBloc: widget.mainBloc,
                 )
-              : SliverFillRemaining(child: FlutterLogo())
+              : currentIndex == 2 ? TvPage(mainBloc: widget.mainBloc): SliverFillRemaining(child: FlutterLogo())
         ],
       ),
       bottomNavigationBar: MyBottomNavigation(

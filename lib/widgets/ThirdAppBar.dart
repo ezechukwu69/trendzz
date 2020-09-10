@@ -2,12 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:trendzz/blocs/MainBloc.dart';
 
-class SecondAppBar extends StatelessWidget {
+class ThirdAppBar extends StatelessWidget {
   final MainBloc bloc;
   final url;
   final int id;
 
-  SecondAppBar({
+  ThirdAppBar({
     this.bloc,
     Key key,
     this.url,
@@ -22,7 +22,7 @@ class SecondAppBar extends StatelessWidget {
       expandedHeight: MediaQuery.of(context).size.height / 1.3,
       flexibleSpace:
               Hero(
-                  tag: url,
+                  tag: "$url",
                    child: CachedNetworkImage(
                   fit: BoxFit.fill,
                   height: MediaQuery.of(context).size.height / 1.3,
