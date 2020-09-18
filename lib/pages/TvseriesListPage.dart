@@ -20,7 +20,6 @@ class _TvSeriesListPageState extends State<TvSeriesListPage> {
   void initState() {
     _controller.addListener(() {
       if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-        print("hello");
         widget.callback();
       }
     });
