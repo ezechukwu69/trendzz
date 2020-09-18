@@ -1,13 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:trendzz/arguments/ScreenArgument.dart';
 import 'package:trendzz/blocs/model/tv/tvseries.dart';
-import 'package:trendzz/pages/TvViewPage.dart';
 
 class TvSeriesSlide extends StatelessWidget {
   final String title;
   final bloc;
-
-  TvSeriesSlide({this.title, this.bloc});
+  final Function callback;
+  TvSeriesSlide({this.title, this.bloc,this.callback});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,16 +21,21 @@ class TvSeriesSlide extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2
-                        .copyWith(color: Colors.white),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5
                   )),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: FlatButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed("/tvSeriesListPage",arguments:
+                    ScreenArguments(
+                      bloc: bloc,
+                      callback: callback,
+                    ));
+                  },
                   icon: Icon(
                     Icons.launch,
                     color: Colors.blue[400],
@@ -67,11 +72,9 @@ class TvSeriesSlide extends StatelessWidget {
                               onTap: () {
                                 Navigator.of(context).pushNamed("/tvView",
                                     arguments: tvSeries[i]);
-                                     Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => TvViewPage()));
+                                    //  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => TvViewPage(),settings: RouteSettings(arguments: tvSeries[i])));
                               },
-                              child: Hero(
-                                tag: "${tvSeries[i].id}",
-                                child: CachedNetworkImage(
+                              child: CachedNetworkImage(
                                     height:
                                         MediaQuery.of(context).size.height / 4,
                                     width:
@@ -82,12 +85,36 @@ class TvSeriesSlide extends StatelessWidget {
                                     imageUrl:
                                         "https://image.tmdb.org/t/p/original${tvSeries[i].posterPath}"),
                               ),
-                            ),
                           )
                         : Container();
                   },
                 ),
               );
+            }  else if(snapshot.hasError) {
+              return Container(
+                height: MediaQuery.of(context).size.height / 4,
+                width: MediaQuery.of(context).size.width,
+                child: Center(child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.error_outline,color: Colors.red,),
+                        ),
+                        Text("${snapshot.error}")
+                      ],
+                    ),
+                    FlatButton(onPressed: callback,child: Text('Retry',style: TextStyle(color: Colors.red),),),
+                  ],
+                ),),);
+            }
+            else if (snapshot.connectionState == ConnectionState.active) {
+              return Container(
+                  height: MediaQuery.of(context).size.height / 4,
+                  child: Center(child: CircularProgressIndicator()));
             }
             return Container(
                 height: MediaQuery.of(context).size.height / 4,

@@ -62,10 +62,10 @@ class Results {
 
   Results.fromJson(Map<String, dynamic> json) {
     originalName = json['original_name'];
-    genreIds = json['genre_ids'].cast<int>();
+    genreIds = json['genre_ids']?.cast<int>();
     name = json['name'];
     popularity = json['popularity'];
-    originCountry = json['origin_country'].cast<String>();
+    originCountry = json['origin_country']?.cast<String>();
     voteCount = json['vote_count'];
     firstAirDate = json['first_air_date'];
     backdropPath = json['backdrop_path'];

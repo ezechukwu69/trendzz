@@ -17,9 +17,7 @@ class MyBottomNavigation extends StatelessWidget {
         currentIndex: currentIndex,
         onTap: updateIndex,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("Movies")),
+          BottomNavigationBarItem(icon: Icon(Icons.view_carousel), title: Text("Movies")),
           BottomNavigationBarItem(
-              icon: Icon(Icons.search), title: Text("Search")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.star), title: Text("Tv series"))
+              icon: Icon(Icons.tv), title: Text("Tv series"))
         ]);}}

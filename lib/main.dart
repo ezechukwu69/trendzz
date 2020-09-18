@@ -1,14 +1,30 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
+import 'package:trendzz/arguments/ScreenArgument.dart';
 import 'package:trendzz/blocs/MainBloc.dart';
+import 'package:trendzz/pages/About.dart';
 import 'package:trendzz/pages/MovieViewPage.dart';
-import 'package:trendzz/pages/TvPage.dart';
-import 'package:trendzz/pages/TvViewPage.dart';
-import 'pages/HomePage.dart';
-import 'widgets/MyAppBar.dart';
+import 'package:trendzz/pages/TvSeriesPage.dart';
+import 'package:trendzz/pages/TvSeriesViewPage.dart';
+import 'package:trendzz/pages/TvseriesListPage.dart';
+import 'package:trendzz/pages/moviesListPage.dart';
+import 'package:trendzz/theme.dart';
+import 'package:trendzz/widgets/SearchAppBar.dart';
+import 'package:trendzz/widgets/TvSearch.dart';
+import 'ad_manager.dart';
+import 'pages/MoviePage.dart';
 import 'widgets/MyBottomNavigation.dart';
+import 'widgets/Search.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   MainBloc mainBloc = MainBloc();
+  mainBloc.tvOnAirTodayBloc.populateData();
+  mainBloc.tvPopularBloc.populateData();
+  mainBloc.tvTopRatedBloc.populateData();
+  mainBloc.popularBloc.populateData();
+  mainBloc.topBloc.populateData();
+  mainBloc.upcomingBloc.populateData();
   runApp(MyApp(mainBloc: mainBloc));
 }
 
@@ -19,46 +35,45 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      key: UniqueKey(),
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: darkTheme(),
+      theme: lightTheme,
+      darkTheme: darkTheme,
       initialRoute: "/",
       routes: {
         "/": (context) => MyHomePage(mainBloc: mainBloc),
         "/tvView": (context) => TvViewPage(bloc: mainBloc),
         "/movieView": (context) => MovieViewPage(bloc: mainBloc),
+        '/about': (context) => About()
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == "/moviesListPage") {
+          return MaterialPageRoute(
+            builder: (context) {
+              ScreenArguments args = settings.arguments;
+              return MoviesListPage(
+                stream: args.bloc,
+                callback: args.callback,
+                searchbloc: mainBloc.movieSearchBloc,
+              );
+            },
+          );
+        } else if (settings.name == "/tvSeriesListPage") {
+          return MaterialPageRoute(
+            builder: (context) {
+              ScreenArguments args = settings.arguments;
+              return TvSeriesListPage(
+                stream: args.bloc,
+                callback: args.callback,
+                searchbloc: mainBloc.tvSearchBloc,
+              );
+            },
+          );
+        }
+        return null;
       },
     );
-  }
-
-  ThemeData darkTheme() {
-    Color mainContrastColor = Colors.white;
-    return ThemeData(
-        appBarTheme: AppBarTheme(
-          color: Colors.transparent,
-          centerTitle: true,
-        ),
-        scaffoldBackgroundColor: Color(0xFF222831),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: Color(0xFF07031a),
-          selectedItemColor: mainContrastColor,
-          unselectedItemColor: Colors.white12,
-        ),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        textTheme: TextTheme(
-          bodyText1: TextStyle(color: mainContrastColor),
-          bodyText2: TextStyle(color: mainContrastColor),
-          caption: TextStyle(color: mainContrastColor),
-          button: TextStyle(color: mainContrastColor),
-          headline1: TextStyle(color: mainContrastColor),
-          headline2: TextStyle(color: mainContrastColor),
-          headline3: TextStyle(color: mainContrastColor),
-          headline4: TextStyle(color: mainContrastColor),
-          headline5: TextStyle(color: mainContrastColor),
-          headline6: TextStyle(color: mainContrastColor),
-          subtitle1: TextStyle(color: mainContrastColor),
-          subtitle2: TextStyle(color: mainContrastColor),
-        ));
   }
 }
 
@@ -73,25 +88,51 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int currentIndex = 0;
+
+  BannerAd _bannerAd;
+
+  void _loadBannerAd() {
+    _bannerAd
+      ..load()
+      ..show(anchorType: AnchorType.bottom);
+  }
+
   @override
   void initState() {
-    widget.mainBloc.popularBloc.populateData();
-    widget.mainBloc.topBloc.populateData();
-    widget.mainBloc.upcomingBloc.populateData();
+    FirebaseAdMob.instance.initialize(appId: AdManager.appId);
+     _bannerAd = BannerAd(
+      adUnitId: AdManager.bannerAdUnitId,
+      size: AdSize.smartBanner,
+  );
+  _loadBannerAd();
     super.initState();
   }
+
+  @override
+void dispose() {
+  _bannerAd?.dispose();
+  super.dispose();
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          MyAppBar(bloc: widget.mainBloc),
+          SearchAppBar(
+            callback: () => currentIndex == 1
+                ? showSearch(
+                    context: context,
+                    delegate: TvSearch(bloc: widget.mainBloc.tvSearchBloc))
+                : showSearch(
+                    context: context,
+                    delegate: Search(bloc: widget.mainBloc.movieSearchBloc)),
+          ),
           currentIndex == 0
-              ? HomePage(
+              ? MoviePage(
                   mainBloc: widget.mainBloc,
                 )
-              : currentIndex == 2 ? TvPage(mainBloc: widget.mainBloc): SliverFillRemaining(child: FlutterLogo())
+              : TvSeriesPage(mainBloc: widget.mainBloc)
         ],
       ),
       bottomNavigationBar: MyBottomNavigation(

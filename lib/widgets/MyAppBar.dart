@@ -4,10 +4,12 @@ import 'package:trendzz/blocs/MainBloc.dart';
 
 class MyAppBar extends StatelessWidget {
   final MainBloc bloc;
+  final showSearch;
 
   const MyAppBar({
     this.bloc,
     Key key,
+    this.showSearch
   }) : super(key: key);
 
   @override

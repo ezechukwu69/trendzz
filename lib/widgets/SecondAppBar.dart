@@ -17,18 +17,18 @@ class SecondAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      title: Text('Trendzz'),
+      iconTheme: IconThemeData(color: Colors.pink),
+      title: Text('Trendzz',style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.pink),),
       floating: true,
       expandedHeight: MediaQuery.of(context).size.height / 1.3,
+      collapsedHeight: MediaQuery.of(context).size.height / 1.3,
+      snap: true,
       flexibleSpace:
-              Hero(
-                  tag: url,
-                   child: CachedNetworkImage(
+              CachedNetworkImage(
                   fit: BoxFit.fill,
                   height: MediaQuery.of(context).size.height / 1.3,
                   width: MediaQuery.of(context).size.width,
-                    imageUrl: "https://image.tmdb.org/t/p/original$url"),
-              )
+               imageUrl: "https://image.tmdb.org/t/p/original$url")
     );
   }
 }

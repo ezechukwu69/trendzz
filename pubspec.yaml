@@ -26,6 +26,8 @@ dependencies:
   rxdart: any
   http: any
   cached_network_image: ^2.3.1
+  google_fonts: any
+  firebase_admob: ^0.9.3
 
   cupertino_icons: ^0.1.3
 
