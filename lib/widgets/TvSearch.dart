@@ -32,27 +32,38 @@ class TvSearch extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed('/tvView',arguments: selec);
+        Navigator.of(context).pushNamed('/tvView', arguments: selec);
       },
       child: FractionallySizedBox(
           heightFactor: 0.9,
           widthFactor: 1.0,
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CachedNetworkImage(
-                  imageUrl: 'https://image.tmdb.org/t/p/original${selec.backdropPath}',
-                  placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(selec.name.toString(),style: Theme.of(context).textTheme.headline6,),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(selec.overview,style: Theme.of(context).textTheme.bodyText1,),
-                )
-              ])),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            selec.backdropPath != null
+                ? CachedNetworkImage(
+                    imageUrl:
+                        'https://image.tmdb.org/t/p/original${selec.backdropPath}',
+                    placeholder: (context, url) => Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : Image.asset('images/abstract-q-g-640-480-1.jpg',
+                    fit: BoxFit.cover),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                selec.name.toString(),
+                style: Theme.of(context).textTheme.headline6,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                selec.overview,
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+            )
+          ])),
     );
   }
 

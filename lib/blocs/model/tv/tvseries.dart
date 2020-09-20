@@ -36,7 +36,7 @@ class Results {
   String name;
   double popularity;
   List<String> originCountry;
-  int voteCount;
+  double voteCount;
   String firstAirDate;
   String backdropPath;
   String originalLanguage;
@@ -64,19 +64,14 @@ class Results {
     originalName = json['original_name'];
     genreIds = json['genre_ids']?.cast<int>();
     name = json['name'];
-    popularity = json['popularity'];
+    popularity = json['popularity'] + 0.0;
     originCountry = json['origin_country']?.cast<String>();
-    voteCount = json['vote_count'];
+    voteCount = json['vote_count'] + 0.0;
     firstAirDate = json['first_air_date'];
     backdropPath = json['backdrop_path'];
     originalLanguage = json['original_language'];
     id = json['id'];
-    if (json['vote_average'] is int) {
-      int x = json['vote_average'];
-      voteAverage = x.toDouble();
-    } else {
-     voteAverage = json['vote_average'];
-    }  
+    voteAverage = json['vote_average'] + 0.0;
     overview = json['overview'];
     posterPath = json['poster_path'];
   }

@@ -52,16 +52,23 @@ class _MoviesListPageState extends State<MoviesListPage> {
                           Text(snapshot.error),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: FlatButton(
-                                onPressed: widget.callback(),
-                                child: Text('Retry',style: Theme.of(context).textTheme.bodyText2.copyWith(color: Colors.red),)),
-                          )
-                        ],
-                      )),
+                        child: FlatButton(
+                            onPressed: widget.callback(),
+                            child: Text(
+                              'Retry',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  .copyWith(color: Colors.red),
+                            )),
+                      )
+                    ],
+                  )),
                 ),
               );
             }
-            List<Results> data;
+
+            var data = <Results>{};
             if (snapshot.hasData) {
               data = snapshot.data;
             }
@@ -85,17 +92,32 @@ class _MoviesListPageState extends State<MoviesListPage> {
                             child: Column(
                               children: [
                                 CachedNetworkImage(
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                        'images/abstract-q-g-640-480-1.jpg',
+                                        fit: BoxFit.cover,
+                                        height: MediaQuery
+                                            .of(context)
+                                            .size
+                                            .height / 0.7,),
                                   imageUrl:
-                                      'https://image.tmdb.org/t/p/original${data[i].posterPath}',
-                                  placeholder: (context, url) => Center(
-                                      child: CircularProgressIndicator()),
+                                  'https://image.tmdb.org/t/p/original${data
+                                      .elementAt(i)
+                                      .posterPath}',
+                                  placeholder: (context, url) =>
+                                      Center(
+                                          child: CircularProgressIndicator()),
                                 ),
                                 ExpansionTile(
-                                  title: Text(data[i].title),
+                                  title: Text(data
+                                      .elementAt(i)
+                                      .title),
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(data[i].overview),
+                                      child: Text(data
+                                          .elementAt(i)
+                                          .overview),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -103,7 +125,7 @@ class _MoviesListPageState extends State<MoviesListPage> {
                                         onPressed: () {
                                           Navigator.of(context).pushNamed(
                                               '/movieView',
-                                              arguments: data[i]);
+                                              arguments: data.elementAt(i));
                                         },
                                         child: Text(
                                           'more',

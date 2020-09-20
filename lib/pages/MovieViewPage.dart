@@ -30,7 +30,7 @@ class _MovieViewPageState extends State<MovieViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle text = Theme.of(context).textTheme.headline6;
+    TextStyle text = Theme.of(context).textTheme.bodyText1;
     TextTheme themes = Theme.of(context).textTheme;
     final Results args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
@@ -42,18 +42,23 @@ class _MovieViewPageState extends State<MovieViewPage> {
         ),
         SliverList(
           delegate: SliverChildListDelegate([
-            Row(
+            Flex(
+              direction: Axis.horizontal,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      args.title,
-                      style: themes.headline4.copyWith(
-                          color: Colors.red, fontWeight: FontWeight.bold),
-                      overflow: TextOverflow.clip,
-                      maxLines: 2,
-                    )),
+                Flexible(
+                  flex: 1,
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        args.title,
+                        style: themes.headline6.copyWith(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.clip,
+                        maxLines: 2,
+                      )),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CircleAvatar(child: Text('${args.voteAverage}')),
@@ -64,7 +69,7 @@ class _MovieViewPageState extends State<MovieViewPage> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 args.overview,
-                style: themes.headline6,
+                style: text,
               ),
             ),
             Padding(
@@ -93,7 +98,7 @@ class _MovieViewPageState extends State<MovieViewPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           'Budget: \$ ${data.budget}',
-                          style: Theme.of(context).textTheme.headline6,
+                          style: text,
                         ),
                       ),
                       Container(

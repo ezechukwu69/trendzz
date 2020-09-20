@@ -1,5 +1,6 @@
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:trendzz/arguments/ScreenArgument.dart';
 import 'package:trendzz/blocs/MainBloc.dart';
 import 'package:trendzz/pages/About.dart';
@@ -11,12 +12,13 @@ import 'package:trendzz/pages/moviesListPage.dart';
 import 'package:trendzz/theme.dart';
 import 'package:trendzz/widgets/SearchAppBar.dart';
 import 'package:trendzz/widgets/TvSearch.dart';
+
 import 'ad_manager.dart';
 import 'pages/MoviePage.dart';
 import 'widgets/MyBottomNavigation.dart';
 import 'widgets/Search.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MainBloc mainBloc = MainBloc();
   mainBloc.tvOnAirTodayBloc.populateData();
@@ -34,6 +36,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return MaterialApp(
       key: UniqueKey(),
       debugShowCheckedModeBanner: false,
@@ -94,25 +99,27 @@ class _MyHomePageState extends State<MyHomePage> {
   void _loadBannerAd() {
     _bannerAd
       ..load()
-      ..show(anchorType: AnchorType.bottom);
+      ..show(
+          anchorType: AnchorType.bottom,
+          anchorOffset: kBottomNavigationBarHeight);
   }
 
   @override
   void initState() {
     FirebaseAdMob.instance.initialize(appId: AdManager.appId);
-     _bannerAd = BannerAd(
+    _bannerAd = BannerAd(
       adUnitId: AdManager.bannerAdUnitId,
       size: AdSize.smartBanner,
-  );
-  _loadBannerAd();
+    );
+    _loadBannerAd();
     super.initState();
   }
 
   @override
-void dispose() {
-  _bannerAd?.dispose();
-  super.dispose();
-}
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

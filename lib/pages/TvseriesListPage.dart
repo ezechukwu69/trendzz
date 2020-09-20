@@ -15,12 +15,21 @@ class TvSeriesListPage extends StatefulWidget {
 }
 
 class _TvSeriesListPageState extends State<TvSeriesListPage> {
-  ScrollController _controller = ScrollController();
+  bool show = true;
+  static double _scrollOffset = 0.0;
+  bool error = false;
+  ScrollController _controller = ScrollController(
+      initialScrollOffset: _scrollOffset, keepScrollOffset: true);
+
   @override
   void initState() {
     _controller.addListener(() {
+      setState(() {
+        _scrollOffset = _controller.position.pixels;
+      });
       if (_controller.position.pixels == _controller.position.maxScrollExtent) {
         widget.callback();
+//        Future.delayed(Duration(seconds: 5)).then((value) => setState(() => show = false));
       }
     });
     super.initState();
@@ -45,23 +54,30 @@ class _TvSeriesListPageState extends State<TvSeriesListPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(snapshot.error),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: FlatButton(
-                                onPressed: widget.callback(),
-                                child: Text('Retry',style: Theme.of(context).textTheme.bodyText2.copyWith(color: Colors.red),)),
-                          )
-                        ],
-                      )),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(snapshot.error),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FlatButton(
+                            onPressed: widget.callback(),
+                            child: Text(
+                              'Retry',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  .copyWith(color: Colors.red),
+                            )),
+                      )
+                    ],
+                  )),
                 ),
               );
             }
-            List<Results> data;
+
+            var data = <Results>{};
             if (snapshot.hasData) {
-              data = snapshot.data;
+              data.addAll(snapshot.data);
             }
             return CustomScrollView(controller: _controller, slivers: [
               SearchAppBar(
@@ -82,20 +98,45 @@ class _TvSeriesListPageState extends State<TvSeriesListPage> {
                             ),
                             child: Column(
                               children: [
-                                CachedNetworkImage(
-                                  errorWidget: (context, url, error) => Icon(Icons.close),
-                                  imageUrl:
-                                      'https://image.tmdb.org/t/p/original${data[i].posterPath}',
-                                  placeholder: (context, url) => Center(
-                                      child: CircularProgressIndicator()),
-
-                                ),
+                                data
+                                    .elementAt(i)
+                                    .posterPath != null ? CachedNetworkImage(
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                        'images/abstract-q-g-640-480-1.jpg',
+                                        fit: BoxFit.cover,
+                                        height: MediaQuery
+                                            .of(context)
+                                            .size
+                                            .height / 0.7,),
+                                  imageUrl: 'https://image.tmdb.org/t/p/original${data
+                                      .elementAt(i)
+                                      .posterPath}',
+                                  placeholder: (context, url) =>
+                                      Container(
+                                        height: MediaQuery
+                                            .of(context)
+                                            .size
+                                            .height / 0.7,
+                                        child: Center(
+                                            child: CircularProgressIndicator()),
+                                      ),
+                                ) : Image.asset(
+                                    'images/abstract-q-g-640-480-1.jpg',
+                                    fit: BoxFit.cover, height: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .height / 0.7),
                                 ExpansionTile(
-                                  title: Text(data[i].name),
+                                  title: Text(data
+                                      .elementAt(i)
+                                      .name),
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(data[i].overview),
+                                      child: Text(data
+                                          .elementAt(i)
+                                          .overview),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -103,7 +144,7 @@ class _TvSeriesListPageState extends State<TvSeriesListPage> {
                                         onPressed: () {
                                           Navigator.of(context).pushNamed(
                                               '/tvView',
-                                              arguments: data[i]);
+                                              arguments: data.elementAt(i));
                                         },
                                         child: Text(
                                           'more',
@@ -119,19 +160,17 @@ class _TvSeriesListPageState extends State<TvSeriesListPage> {
                           ),
                         );
                       }
-                      if (snapshot.hasError) {
-                        return error();
-                      } else {
-                        return Padding(
+                      return snapshot.hasError ? error() : Visibility(
+                        visible: show,
+                        replacement: Container(),
+                        child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Center(child: CircularProgressIndicator()),
-                        );
-                      }
-                    }, childCount: data.length + 1))
+                        ),
+                      );
+                      }, childCount: data.length + 1))
                   : SliverFillRemaining(
-                      child: snapshot.hasError && !snapshot.hasData
-                          ? error()
-                          : Center(child: CircularProgressIndicator()))
+                  child: Center(child: CircularProgressIndicator()))
             ]);
 
           },

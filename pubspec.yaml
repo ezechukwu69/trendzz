@@ -29,7 +29,7 @@ dependencies:
   google_fonts: any
   firebase_core: ^0.4.0+9
   firebase_analytics: ^5.0.2
-  firebase_admob: ^0.9.3
+  firebase_admob: ^0.9.3+4
 
   cupertino_icons: ^0.1.3
 

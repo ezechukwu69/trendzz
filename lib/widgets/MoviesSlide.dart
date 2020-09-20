@@ -51,7 +51,8 @@ class MoviesSlide extends StatelessWidget {
           stream: bloc,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              List<Results> movies = snapshot.data;
+              var movies = <Results>{};
+              movies = snapshot.data;
               print(movies.length);
               return Container(
                 height: MediaQuery.of(context).size.height / 4,
@@ -68,18 +69,26 @@ class MoviesSlide extends StatelessWidget {
                             child: GestureDetector(
                               onTap: () {
                                 Navigator.of(context).pushNamed("/movieView",
-                                    arguments: movies[i]);
+                                    arguments: movies.elementAt(i));
                               },
                               child: CachedNetworkImage(
                                   height:
-                                      MediaQuery.of(context).size.height / 4,
+                                  MediaQuery
+                                      .of(context)
+                                      .size
+                                      .height / 4,
                                   width:
-                                      MediaQuery.of(context).size.width / 3,
+                                  MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width / 3,
                                   key: UniqueKey(),
                                   placeholder: (context, url) =>
                                       CircularProgressIndicator(),
                                   imageUrl:
-                                      "https://image.tmdb.org/t/p/original${movies[i].posterPath}"),
+                                  "https://image.tmdb.org/t/p/original${movies
+                                      .elementAt(i)
+                                      .posterPath}"),
                             ),
                           )
                         : Container();

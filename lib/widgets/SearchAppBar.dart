@@ -15,8 +15,22 @@ class SearchAppBar extends StatelessWidget {
       title: Text('Trendzz',style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.pink),),
       floating: true,
       actions: [
-        IconButton(icon: Icon(Icons.search),onPressed: callback,),
-        IconButton(icon: Icon(Icons.info_outline),onPressed: ()=>Navigator.of(context).pushNamed('/about'),)
+        IconButton(
+          icon: Icon(
+            Icons.search,
+            color: ThemeMode.system == ThemeMode.light
+                ? Colors.pink
+                : Colors.white,
+          ),
+          onPressed: callback,
+        ),
+        IconButton(
+          icon: Icon(Icons.info_outline,
+              color: ThemeMode.system == ThemeMode.light
+                  ? Colors.pink
+                  : Colors.white),
+          onPressed: () => Navigator.of(context).pushNamed('/about'),
+        )
       ],
     );
   }

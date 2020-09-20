@@ -25,9 +25,10 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: TvSeriesSlide(
-                title: "On Air Today",
-                bloc: widget.mainBloc.tvOnAirTodayBloc.getTvToday,
-                callback: ()=>widget.mainBloc.tvOnAirTodayBloc.populateData()),
+              title: "On Air Today",
+              bloc: widget.mainBloc.tvOnAirTodayBloc.getTvToday,
+              callback: () => widget.mainBloc.tvOnAirTodayBloc.populateData(),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
