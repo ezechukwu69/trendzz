@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:trendzz/blocs/MainBloc.dart';
 import 'package:trendzz/blocs/model/movies.dart';
-import 'package:trendzz/blocs/movies/PopularBloc.dart';
 import 'package:trendzz/model/IndividualMovie.dart';
 import 'package:trendzz/widgets/SecondAppBar.dart';
 
+import '../Constants.dart';
+
 class MovieViewPage extends StatefulWidget {
   final MainBloc bloc;
+
   MovieViewPage({this.bloc, Key key}) : super(key: key);
 
   @override

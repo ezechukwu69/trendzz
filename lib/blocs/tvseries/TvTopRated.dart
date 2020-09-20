@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 import 'package:trendzz/blocs/model/tv/tvseries.dart';
+
+import '../../Constants.dart';
 
 class TvTopRatedBloc {
   ReplaySubject tvtopratedBloc = ReplaySubject();
@@ -34,6 +35,3 @@ class TvTopRatedBloc {
   }
 }
 
-Map<String, dynamic> parsejson(String value) {
-  return json.decode(value);
-}

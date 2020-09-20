@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 import 'package:trendzz/errors/NoDataError.dart';
 
+import '../../Constants.dart';
 import '../model/movies.dart';
 
 class PopularBloc {
@@ -43,6 +43,3 @@ class PopularBloc {
   }
 }
 
-Map<String, dynamic> parsejson(String value) {
-  return json.decode(value);
-}

@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:trendzz/blocs/model/tv/tvseries.dart';
+
+import '../../Constants.dart';
 
 class TvOnAirTodayBloc {
   ReplaySubject onairtoday = ReplaySubject();
@@ -36,8 +37,4 @@ class TvOnAirTodayBloc {
   void populateData() {
     setData();
   }
-}
-
-Map<String, dynamic> parsejson(String value) {
-  return json.decode(value);
 }

@@ -15,21 +15,13 @@ class TvSeriesListPage extends StatefulWidget {
 }
 
 class _TvSeriesListPageState extends State<TvSeriesListPage> {
-  bool show = true;
-  static double _scrollOffset = 0.0;
-  bool error = false;
-  ScrollController _controller = ScrollController(
-      initialScrollOffset: _scrollOffset, keepScrollOffset: true);
+  ScrollController _controller = ScrollController();
 
   @override
   void initState() {
     _controller.addListener(() {
-      setState(() {
-        _scrollOffset = _controller.position.pixels;
-      });
       if (_controller.position.pixels == _controller.position.maxScrollExtent) {
         widget.callback();
-//        Future.delayed(Duration(seconds: 5)).then((value) => setState(() => show = false));
       }
     });
     super.initState();
@@ -98,45 +90,34 @@ class _TvSeriesListPageState extends State<TvSeriesListPage> {
                             ),
                             child: Column(
                               children: [
-                                data
-                                    .elementAt(i)
-                                    .posterPath != null ? CachedNetworkImage(
-                                  errorWidget: (context, url, error) =>
-                                      Image.asset(
+                                data.elementAt(i).posterPath != null
+                                    ? CachedNetworkImage(
+                                        errorWidget: (context, url, error) =>
+                                            Image.asset(
+                                          'images/abstract-q-g-640-480-1.jpg',
+                                          fit: BoxFit.cover,
+                                          height: 300.0,
+                                        ),
+                                        imageUrl:
+                                            'https://image.tmdb.org/t/p/original${data.elementAt(i).posterPath}',
+                                        placeholder: (context, url) =>
+                                            Container(
+                                          height: 300.0,
+                                          child: Center(
+                                              child:
+                                                  CircularProgressIndicator()),
+                                        ),
+                                      )
+                                    : Image.asset(
                                         'images/abstract-q-g-640-480-1.jpg',
                                         fit: BoxFit.cover,
-                                        height: MediaQuery
-                                            .of(context)
-                                            .size
-                                            .height / 0.7,),
-                                  imageUrl: 'https://image.tmdb.org/t/p/original${data
-                                      .elementAt(i)
-                                      .posterPath}',
-                                  placeholder: (context, url) =>
-                                      Container(
-                                        height: MediaQuery
-                                            .of(context)
-                                            .size
-                                            .height / 0.7,
-                                        child: Center(
-                                            child: CircularProgressIndicator()),
-                                      ),
-                                ) : Image.asset(
-                                    'images/abstract-q-g-640-480-1.jpg',
-                                    fit: BoxFit.cover, height: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .height / 0.7),
+                                        height: 300.0),
                                 ExpansionTile(
-                                  title: Text(data
-                                      .elementAt(i)
-                                      .name),
+                                  title: Text(data.elementAt(i).name),
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(data
-                                          .elementAt(i)
-                                          .overview),
+                                      child: Text(data.elementAt(i).overview),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -160,17 +141,19 @@ class _TvSeriesListPageState extends State<TvSeriesListPage> {
                           ),
                         );
                       }
-                      return snapshot.hasError ? error() : Visibility(
-                        visible: show,
-                        replacement: Container(),
-                        child: Padding(
+                      if (snapshot.hasError) {
+                        return error();
+                      } else {
+                        return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Center(child: CircularProgressIndicator()),
-                        ),
-                      );
+                        );
+                      }
                       }, childCount: data.length + 1))
                   : SliverFillRemaining(
-                  child: Center(child: CircularProgressIndicator()))
+                  child: snapshot.hasError && !snapshot.hasData
+                      ? error()
+                      : Center(child: CircularProgressIndicator()))
             ]);
 
           },

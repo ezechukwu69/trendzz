@@ -1,9 +1,9 @@
-import 'dart:convert';
-
-import 'package:rxdart/rxdart.dart';
-import 'package:trendzz/blocs/model/movies.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:rxdart/rxdart.dart';
+import 'package:trendzz/blocs/model/movies.dart';
+
+import '../../Constants.dart';
 
 class MovieSearchBloc {
   ReplaySubject search = ReplaySubject();
@@ -24,8 +24,4 @@ class MovieSearchBloc {
         });
     }).then((value) => search.add(list));
   }
-}
-
-Map<String, dynamic> parsejson(String value) {
-  return json.decode(value);
 }

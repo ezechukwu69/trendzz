@@ -21,7 +21,6 @@ class _MoviesListPageState extends State<MoviesListPage> {
   void initState() {
     _controller.addListener(() {
       if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-        print('end');
         widget.callback();
       }
     });
@@ -94,19 +93,17 @@ class _MoviesListPageState extends State<MoviesListPage> {
                                 CachedNetworkImage(
                                   errorWidget: (context, url, error) =>
                                       Image.asset(
-                                        'images/abstract-q-g-640-480-1.jpg',
-                                        fit: BoxFit.cover,
-                                        height: MediaQuery
-                                            .of(context)
-                                            .size
-                                            .height / 0.7,),
+                                    'images/abstract-q-g-640-480-1.jpg',
+                                    fit: BoxFit.cover,
+                                    height: 300.0,
+                                  ),
                                   imageUrl:
-                                  'https://image.tmdb.org/t/p/original${data
-                                      .elementAt(i)
-                                      .posterPath}',
-                                  placeholder: (context, url) =>
-                                      Center(
-                                          child: CircularProgressIndicator()),
+                                      'https://image.tmdb.org/t/p/original${data.elementAt(i).posterPath}',
+                                  placeholder: (context, url) => Container(
+                                    height: 300.0,
+                                    child: Center(
+                                        child: CircularProgressIndicator()),
+                                  ),
                                 ),
                                 ExpansionTile(
                                   title: Text(data

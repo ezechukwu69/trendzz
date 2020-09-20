@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:trendzz/blocs/MainBloc.dart';
 import 'package:trendzz/blocs/model/tv/tvseries.dart';
-import 'package:trendzz/blocs/movies/PopularBloc.dart';
 import 'package:trendzz/model/IndividualTvSeries.dart';
 import 'package:trendzz/widgets/SecondAppBar.dart';
 
+import '../Constants.dart';
+
 class TvViewPage extends StatefulWidget {
   final MainBloc bloc;
+
   TvViewPage({this.bloc, Key key}) : super(key: key);
 
   @override

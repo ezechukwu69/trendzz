@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 
+import '../../Constants.dart';
 import '../model/movies.dart';
 
 class UpcomingBloc {
@@ -35,6 +35,3 @@ class UpcomingBloc {
   }
 }
 
-Map<String, dynamic> parsejson(String value) {
-  return json.decode(value);
-}

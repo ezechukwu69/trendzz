@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 
+import '../../Constants.dart';
 import '../model/movies.dart';
 
 class TopBloc {
@@ -30,7 +29,4 @@ class TopBloc {
       }
     }).catchError((e)=>top.addError("Network Error"));
   }
-}
-Map<String, dynamic> parsejson(String value) {
-  return json.decode(value);
 }
