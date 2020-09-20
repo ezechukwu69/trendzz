@@ -1,4 +1,4 @@
-# trendzz
+## Trendzz
 
 A new Flutter project.
 
